@@ -14,17 +14,17 @@ namespace LibraryServiceWebAPI
             // Web API routes
             config.MapHttpAttributeRoutes();
 
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
+           // config.Routes.MapHttpRoute(
+           //     name: "DefaultApi",
+           //     routeTemplate: "api/{controller}/{id}",
+           //     defaults: new { id = RouteParameter.Optional }
+           // );
 
-            config.Routes.MapHttpRoute(
-                name: "getByTitle",
-                routeTemplate: "api/{controller}/{title}",
-                defaults: new { title = RouteParameter.Optional }
-           );
+           // config.Routes.MapHttpRoute(
+           //     name: "getByTitle",
+           //     routeTemplate: "api/{controller}/{title}",
+           //     defaults: new { title = RouteParameter.Optional }
+           //);
         }
     }
 }

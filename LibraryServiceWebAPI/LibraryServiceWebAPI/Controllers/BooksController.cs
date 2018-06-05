@@ -11,7 +11,7 @@ namespace LibraryServiceWebAPI.Controllers
     public class BooksController : ApiController
     {
         [HttpGet]
-        //[Route("api/books")]
+        [Route("api/books")]
         public HttpResponseMessage GetAllBooks()
         {
             try
@@ -36,7 +36,7 @@ namespace LibraryServiceWebAPI.Controllers
         }
 
         [HttpGet]
-        //[Route("api/books/{id:int}")]
+        [Route("api/books/{id:int}")]
         public HttpResponseMessage GetBookByID(int id)
         {
             try
@@ -61,7 +61,7 @@ namespace LibraryServiceWebAPI.Controllers
         }
 
         [HttpGet]
-        //[Route("api/books/{title}")]
+        [Route("api/books/{title}")]
         public HttpResponseMessage GetBookByTitle(string title)
         {
             try
@@ -86,7 +86,7 @@ namespace LibraryServiceWebAPI.Controllers
         }
 
         [HttpPut]
-        //[Route("api/books/{id:int}")]
+        [Route("api/books/{id:int}")]
         public HttpResponseMessage UpdateBookbyID(int id, [FromBody] Book bookDetails)
         {
             try
@@ -119,7 +119,7 @@ namespace LibraryServiceWebAPI.Controllers
         }
 
         [HttpDelete]
-        //[Route("api/books/{id:int}")]
+        [Route("api/books/{id:int}")]
         public HttpResponseMessage RemoveBook(int id)
         {
             try
