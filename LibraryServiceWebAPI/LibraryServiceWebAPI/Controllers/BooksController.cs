@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using LibraryDAL;
+using LibraryServiceWebAPI.Models;
 
 namespace LibraryServiceWebAPI.Controllers
 {
@@ -95,9 +96,20 @@ namespace LibraryServiceWebAPI.Controllers
                 {
                     entities.Books.Add(book);
                     entities.SaveChanges();
-                    entities.Books.ToList();
-                    var responseMessage = Request.CreateResponse(HttpStatusCode.Created, entities);
-                    responseMessage.Headers.Location = new Uri(Request.RequestUri + book.Id.ToString());
+                    BookDTO bookDTO = entities.Books.Select(b => new BookDTO
+                                    {
+                                        Id = b.Id,
+                                        Title = b.Title,
+                                        Author = b.Author,
+                                        Genre = b.Genre,
+                                        ISBN = b.ISBN,
+                                        PublishDate = b.PublishDate,
+                                        Publisher = b.Publisher
+                                    }).FirstOrDefault();
+                    HttpResponseMessage responseMessage = 
+                        Request.CreateResponse(HttpStatusCode.Created);
+                    responseMessage.Headers.Location = 
+                        new Uri(Request.RequestUri + bookDTO.Id.ToString());
                     return responseMessage;
                 }
             }
@@ -109,7 +121,7 @@ namespace LibraryServiceWebAPI.Controllers
 
         [HttpPut]
         [Route("api/books/{id:int}")]
-        public HttpResponseMessage UpdateBookbyID(int id, [FromBody] Book bookDetails)
+        public HttpResponseMessage UpdateBookbyID(int id, [FromBody] BookDTO bookDetails)
         {
             try
             {
