@@ -5,14 +5,13 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using LibraryDAL;
-using LibraryServiceWebAPI.Models;
 
 namespace LibraryServiceWebAPI.Controllers
 {
     public class BooksController : ApiController
     {
         [HttpGet]
-        [Route("api/books")]
+        [Route("api/books", Name = "GetAllBooks")]
         public HttpResponseMessage GetAllBooks()
         {
             try
@@ -37,7 +36,7 @@ namespace LibraryServiceWebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("api/books/{id:int}")]
+        [Route("api/books/{id:int}", Name = "SearchBooksbyId")]
         public HttpResponseMessage GetBookByID(int id)
         {
             try
@@ -62,7 +61,7 @@ namespace LibraryServiceWebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("api/books/{title:alpha}")]
+        [Route("api/books/{title:alpha}", Name = "SearchBooksbyTitle")]
         public HttpResponseMessage GetBookByTitle(string title)
         {
             try
@@ -87,7 +86,7 @@ namespace LibraryServiceWebAPI.Controllers
         }
 
         [HttpPost]
-        [Route("api/books")]
+        [Route("api/books", Name = "CreateNewBook")]
         public HttpResponseMessage AddBook([FromBody] Book book)
         {
             try
@@ -96,20 +95,9 @@ namespace LibraryServiceWebAPI.Controllers
                 {
                     entities.Books.Add(book);
                     entities.SaveChanges();
-                    BookDTO bookDTO = entities.Books.Select(b => new BookDTO
-                                    {
-                                        Id = b.Id,
-                                        Title = b.Title,
-                                        Author = b.Author,
-                                        Genre = b.Genre,
-                                        ISBN = b.ISBN,
-                                        PublishDate = b.PublishDate,
-                                        Publisher = b.Publisher
-                                    }).FirstOrDefault();
-                    HttpResponseMessage responseMessage = 
-                        Request.CreateResponse(HttpStatusCode.Created);
-                    responseMessage.Headers.Location = 
-                        new Uri(Request.RequestUri + bookDTO.Id.ToString());
+
+                    var responseMessage = Request.CreateResponse(HttpStatusCode.Created,book);
+                    responseMessage.Headers.Location = new Uri(Url.Link("CreateNewBook", new { id = book.Id }));
                     return responseMessage;
                 }
             }
@@ -120,8 +108,8 @@ namespace LibraryServiceWebAPI.Controllers
         }
 
         [HttpPut]
-        [Route("api/books/{id:int}")]
-        public HttpResponseMessage UpdateBookbyID(int id, [FromBody] BookDTO bookDetails)
+        [Route("api/books/{id:int}", Name = "UpdateBookById")]
+        public HttpResponseMessage UpdateBookbyID(int id, [FromBody] Book bookDetails)
         {
             try
             {
@@ -153,7 +141,7 @@ namespace LibraryServiceWebAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("api/books/{id:int}")]
+        [Route("api/books/{id:int}", Name = "DeleteBookById")]
         public HttpResponseMessage RemoveBook(int id)
         {
             try
@@ -164,6 +152,7 @@ namespace LibraryServiceWebAPI.Controllers
                     if (entity != null)
                     {
                         entities.Books.Remove(entity);
+                        entities.SaveChanges();
                         return Request.CreateResponse(HttpStatusCode.OK);
                     }
                     else
