@@ -85,6 +85,33 @@ namespace LibraryServiceWebAPI.Controllers
             }
         }
 
+        //
+        [HttpPost]
+        [Route("api/books")]
+        public HttpResponseMessage AddBook([FromBody] Book book)
+        {
+            using (BooksLibraryEntities entities = new BooksLibraryEntities())
+            {
+                using (var currentTranscation = entities.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        entities.Books.Add(book);
+                        entities.SaveChanges();
+                        currentTranscation.Commit();
+                        var responseMessage = Request.CreateResponse(HttpStatusCode.Created, entities);
+                        responseMessage.Headers.Location = new Uri(Request.RequestUri + book.Id.ToString());
+                        return responseMessage;
+                    }
+                    catch (Exception ex)
+                    {
+                        currentTranscation.Rollback();
+                        return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+                    }
+                }
+            }
+        }
+
         [HttpPut]
         [Route("api/books/{id:int}")]
         public HttpResponseMessage UpdateBookbyID(int id, [FromBody] Book bookDetails)

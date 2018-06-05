@@ -98,10 +98,6 @@
       <DependentUpon>Books.edmx</DependentUpon>
       <LastGenOutput>Books.cs</LastGenOutput>
     </Content>
-    <Content Include="BooksLibrary.mdf" />
-    <Content Include="BooksLibrary_log.ldf">
-      <DependentUpon>BooksLibrary.mdf</DependentUpon>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.1">
