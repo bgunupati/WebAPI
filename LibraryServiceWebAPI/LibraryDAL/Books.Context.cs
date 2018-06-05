@@ -24,7 +24,6 @@ namespace LibraryDAL
         {
             throw new UnintentionalCodeFirstException();
         }
-    
         public virtual DbSet<Book> Books { get; set; }
     }
 }
